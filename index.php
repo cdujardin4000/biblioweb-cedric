@@ -3,15 +3,20 @@ include 'includes/header.php';
 include 'functions.php';
 include 'dbaccess.php';
 
+
 if (isset($_GET['error']) &&  $_GET['error'] == 'membre') {
     $error = "Désolé, vous devez être membre pour aller sur cette page...";
 } else if (isset($_GET['error']) &&  $_GET['error'] == 'admin'){
     $error = "Désolé, vous devez être admin pour aller sur cette page...";
 }
+
+
 if (isset($_GET['succes']) &&  $_GET['succes'] == 'deco') {
     $succes = "Vous êtes déconnecté, à bientôt";
 } else if (isset($_GET['succes']) &&  $_GET['succes'] == 'connect'){
     $succes = "Bonjour " . $_SESSION['username'] . ". Vous êtes bin connecté en tant que " . $_SESSION['status'] . ", Heureux de vous revoir parmis nous";
+} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'userCreated'){
+    $succes = "Bienvenue parmis nous " . $_SESSION['username'] . ". N'hésitez pas à contacter un admin en cas de problème.";
 }
 
 //récupere les livres
@@ -43,6 +48,13 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
     <!-- On affiche les erreurs -->
     <p class="error"><?= $error ?></p>
     <?php } ?>
+    <!--On affiche la photo pour les nouveau membre-->
+    <?php if($_SESSION['status'] == 'novice') { ?>
+        <img src="img/dock-1846008_1920.jpg" class="img-welcome"/>
+        <!--Sinon on affiche pas-->
+    <?php }  else { ?>
+
+    <?php } ?>
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -58,8 +70,8 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                 <th>
                     <h2 class='list-text'>Couverture</h2>
                 </th>
-                <!--On affiche pas le bouton si on est pas connecté || si on est ni admin ni membre-->
-                <?php if(!isset($_SESSION['status']) || $_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
+                <!--On affiche pas le bouton si on est ni admin ni membre-->
+                <?php if($_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
                 <!--Sinon on l'affiche-->
                 <?php }  else { ?>
                 <th>
@@ -88,7 +100,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                     <img src="<?= $book['cover_url'] ?>" alt="<?= $book['title'] ?>" class='book list-img'>
                 </td>
                 <!--On affiche pas le bouton si on est pas connecté || si on est ni admin ni membre-->
-                <?php if(!isset($_SESSION['status']) || $_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
+                <?php if($_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
                 <!--Sinon on l'affiche-->
                 <?php }  else { ?>
                 <td>

@@ -86,6 +86,37 @@ function pwVerif($username, $password)
 }
 
 
+
+function addUser($username, $password, $mail)
+{
+// Create connection
+    $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+// Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+    // Nettoyage des données externes
+    $username = mysqli_real_escape_string($mysqli, $username);
+    $mail = mysqli_real_escape_string($mysqli, $mail);
+    $password = password_hash($password, PASSWORD_BCRYPT);
+
+
+    $query = "INSERT INTO users (login, password, email, statut) VALUES ('$username', '$password', '$mail', 'membre')";
+
+    if ($mysqli->query($query) === TRUE) {
+
+        $mysqli->close();
+        $_SESSION['username'] = $username;
+        $_SESSION['status'] = 'novice';
+        header("location: ../index.php?succes=userCreated");
+
+    } else {
+
+        header("location: signUp.php?path=admin&error=db");
+    }
+}
+
+/*
 function changeLogo(){
     $LogoMessage = "Veuillez choisir le nouveau logo";
     if(!empty($_FILES['logo'])){
@@ -111,7 +142,7 @@ function changeLogo(){
         }
     }
 
-}
+}*/
 
 
 

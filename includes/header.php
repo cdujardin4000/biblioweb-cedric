@@ -1,5 +1,9 @@
 <?php
 session_start(); // on demarre une session
+if (!isset($_SESSION['status'])){
+    $_SESSION['status'] = "unknown";
+}
+
 // Verification du chemin pour injecter les scripts
 $prefUrl = "";
 if(isset($_GET['path']) && $_GET['path'] == "admin")
