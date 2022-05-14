@@ -2,9 +2,7 @@
 table {
     text-align: center;
 }
-form{
-    margin-bottom: 1rem;
-}
+
 /*header*/
 .logo-header{
     height: 3rem;
@@ -21,31 +19,6 @@ form{
 }
 #input{
     margin-bottom: .5rem;
-}
-a.nav-link.text-white:hover{
-    color: #d12d90;
-}
-p.welcome{
-    color: #ce0384;
-}
-
-/*list*/
-.table-bordered > :not(caption) > * > * {
-    border-width: 2px;
-}
-th{
-    border : black 4px solid;
-}
-p.list-text{
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-a{
-    color: #ce0384;
-    text-decoration: none;
-}
-a:hover{
-    color: #d12d90;
 }
 /*footer*/
 footer{
@@ -66,33 +39,11 @@ footer > a:hover {
 .copyright{
     text-align: center;
 }
-
-.my-4{
-    margin: 0;
+.copyright a:hover{
+    color : #d0d0b4;
 }
-
-h4{
-    margin-top: 50%;
-    margin-bottom: 50%;
-}
-.thDetail{
-    max-height: 2.5rem;
-}
-
-/*view*/
-.book-title{
-    text-align: center;
+a.mail{
+    color: #d12d90;
 }
 
 
-p.errorLogin{
-    color: red;
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-.img-welcome{
-    width: 100%;
-    margin-bottom: 2rem;
-    max-height: 25rem;
-}
