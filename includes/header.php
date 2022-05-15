@@ -1,15 +1,42 @@
-<?php require 'dbaccess.php'; ?>
+<?php
+session_start(); // on demarre une session
+if (!isset($_SESSION['status'])){
+    $_SESSION['status'] = "unknown";
+}
+
+// Verification du chemin pour injecter les scripts
+$prefUrl = "";
+if(isset($_GET['path']) && $_GET['path'] == "admin")
+{
+    $prefUrl = "../";
+}
+
+// Verification de la page pour afficher le double menu ou non
+$doubleMenu = true;
+if(isset($_GET['action']) && ($_GET['action'] == "login" || $_GET['action'] == "signUp")) {
+    $doubleMenu = false;
+}
+
+// Verification si l'utilisateur est connecté pour le message de bienvenue ou afficher son username
+$connected = false;
+$messageWelcome = "Bonjour cher inconu!!!";
+if (isset($_SESSION['username'])){
+    $connected = true;
+    $messageWelcome = "Bonjour " . $_SESSION['username'] . ", vous etes connecté en tant que " . strtoupper($_SESSION['status']) .".";
+}
+
+?>
 <!doctype html>
 <html lang="fr">
 <head>
+    <title>Biblioweb</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href=<?=$prefUrl."css\bootstrap.min.css"?>>
     <!-- CSS -->
-    <link rel="stylesheet" href="css/screen.css">
-    <title>Biblioweb</title>
+    <link rel="stylesheet" href=<?=$prefUrl."css\screen.css"?>>
 </head>
 <body>
 
@@ -17,38 +44,44 @@
     <div class="px-3 py-2 bg-dark text-white border-bottom">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                    <img src ="img/logo-Biblioweb.jpeg" alt="logo du header" title="LOGO" class="logo-header">
+                <a class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none" href=<?=$prefUrl."index.php"?>>
+                    <img alt="logo du header" title="LOGO" class="logo-header" src=<?=$prefUrl."img/logo-Biblioweb.jpeg"?>>
                 </a>
 
                 <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                     <li>
-                        <a href="#" class="nav-link text-secondary">
-                            <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
-                            Home
-                        </a>
+                        <a  class="nav-link text-secondary href=<?=$prefUrl."index.php"?>">Home</a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
-                            Admin
-                        </a>
+                        <a  class="nav-link text-white" href=<?=$prefUrl."admin\membre.php?path=admin"?>>Membre</a>
+                    </li>
+                    <li>
+                        <a  class="nav-link text-white" href=<?=$prefUrl."admin\admin.php?path=admin"?>>Admin</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="px-3 py-2 bg-dark mb-3">
-        <div class="container d-flex flex-wrap justify-content-between">
-            <form class="text-start" action="index.php" method="get">
-                <input type="text" class="form-control form-control-dark" id="input" placeholder="Rechercher un auteur..." aria-label="Search" name="query">
-                <input type="submit" class="btn btn-outline-light me-2" value="Rechercher">
-            </form>
-
-            <div class="text-end">
-                <button type="button" class="btn btn-light text-dark me-2">Login</button>
-                <button type="button" class="btn btn-primary">Sign-up</button>
+    <?php if($doubleMenu) { ?>
+        <div class="px-3 py-2 bg-dark mb-3">
+            <div class="container d-flex flex-wrap justify-content-between">
+                <form class="text-start"  method="get" action=<?=$prefUrl."index.php"?>>
+                    <input type="text" class="form-control form-control-dark" id="input" placeholder="Rechercher un auteur..."  name="query">
+                    <input type="submit" class="btn btn-outline-light me-2" value="Rechercher">
+                </form>
+                <div class="text-end">
+                    <p class = "welcome"><?= $messageWelcome?></p>
+                    <?php
+                    if ($connected) { ?>
+                        <a  class="btn btn-outline-light" href=<?=$prefUrl."admin\log.php?action=logout"?>>Logout</a>
+                    <?php } else { ?>
+                        <a class="btn btn-outline-light" href=<?=$prefUrl."admin\log.php?action=login&path=admin"?>>Login</a>
+                        <a class="btn btn-outline-light" href=<?=$prefUrl."admin\signUp.php?action=signUp&path=admin"?>>Sign-up</a>
+                    <?php } ?>
+                </div>
             </div>
         </div>
-    </div>
+    <?php } else { ?>
+
+    <?php } ?>
 </header>

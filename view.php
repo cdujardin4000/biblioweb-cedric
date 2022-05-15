@@ -32,7 +32,7 @@ $message = $getFromAuth['message'];
         <?php if(!isset($_SESSION['status']) || $_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
             <!--//Sinon on l'affiche-->
         <?php }  else { ?>
-            <a class="btn btn-outline-dark btn-lg" href="edit.php?id=<?= $id ?>&authId=<?= $authId ?>" >Modifier ce livre</a>
+            <a class="btn btn-primary" href="edit.php?id=<?= $id ?>&authId=<?= $authId ?>" >Edit</a>
         <?php } ?>
         <h1 class="book-title"><?= $book['title']?></h1>
         <table class="table table-striped table-bordered">

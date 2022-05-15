@@ -7,6 +7,9 @@ $message="";
 $connected = false;
 if(isset($_GET['action']) && $_GET['action'] == 'logout')
 {
+    /**
+     * ICI AJOUTER LE CODE POUR RECUPERER LES DONNEES UTILISATEUR ANONYMES
+     */
     session_unset(); // suppression des variables de sessions
     session_destroy(); // destruction de la session
     header("location: ../index.php?succes=deco");

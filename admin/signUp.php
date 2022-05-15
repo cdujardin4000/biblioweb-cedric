@@ -35,23 +35,23 @@ if (!empty($_POST['username']) && !empty($_POST['password1']) && !empty($_POST['
     <form class="row g-3"  method="post" action="signUp.php?path=admin" >
         <div class="col-md-4">
             <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="inputUsername" name = "username">
+            <input type="text" class="form-control" id="inputUsername" name = "username" required>
         </div>
         <div class="col-md-4">
             <label for="password1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="InputPassword1" name = "password1">
+            <input type="password" class="form-control" id="InputPassword1" name = "password1" required>
         </div>
         <div class="col-md-4">
             <label for="password2" class="form-label">Confirmez password</label>
-            <input type="password" class="form-control" id="InputPassword2" name = "password2">
+            <input type="password" class="form-control" id="InputPassword2" name = "password2" required>
         </div>
         <div class="col-md-6">
             <label for="mail1" class="form-label">Mail</label>
-            <input type="email" class="form-control" id="inputAddress" placeholder="Entrez votre adresse mail" name = "mail1">
+            <input type="email" class="form-control" id="inputAddress" placeholder="Entrez votre adresse mail" name = "mail1" required>
         </div>
         <div class="col-md-6">
             <label for="mail2" class="form-label">Confirmez mail</label>
-            <input type="email" class="form-control" id="inputAddress2" placeholder="confirmez votre adresse mail" name = "mail2">
+            <input type="email" class="form-control" id="inputAddress2" placeholder="confirmez votre adresse mail" name = "mail2" required>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Sign in</button>

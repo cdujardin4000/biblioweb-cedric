@@ -1,31 +1,63 @@
 <?php
-require 'config.php';
 
-$message = "";
-// se connecter au serveur Mysql
+use JetBrains\PhpStorm\ArrayShape;
 
-$mysqli = @mysqli_connect(HOSTNAME, USERNAME, PASSWORD); //@pour ne rien afficher si erreur
+include('config.php');
 
-// selectionner une base de donnée
-if($mysqli){
-    if(mysqli_select_db($mysqli, DATABASE)){
-        //préparer une requète
-        $query = 'SELECT * FROM `books`';
-        $result = mysqli_query($mysqli, $query);
-        if($result){
-            //extraire les résultats
-            while (($book = mysqli_fetch_assoc($result)) != null){
-                $books[] = $book;
+/**
+ * @param $query
+ * @return array
+ */
+#[ArrayShape(['data' => "array", 'message' => "string"])]
+function dbAccess($query)
+{
+    $data = [];
+    $message = "";
+
+    // se connecter au serveur Mysql
+    $mysqli = @mysqli_connect(HOSTNAME, USERNAME, PASSWORD); //@pour ne rien afficher si erreur
+
+    // selectionner une base de donnée
+    if ($mysqli)
+    {
+
+        if (mysqli_select_db($mysqli, DATABASE))
+        {
+            // Nettoyage des données externes
+            $query = mysqli_real_escape_string($mysqli, $query);
+            //préparer une requète
+            $result = mysqli_query($mysqli, $query);
+
+            if($result){
+                //extraire les résultats
+                while (($line = mysqli_fetch_assoc($result)) != null)
+                {
+                    $data[] = $line;
+                }
+                //libérer la mémoire
+                mysqli_free_result($result);
+                //fermer la connection
+                mysqli_close($mysqli);
+            } else
+            {
+                $message = $mysqli->error;
             }
-            //libérer la mémoire
-            mysqli_free_result($result);
+        } else
+        {
+            $message = $mysqli->error;
         }
-    } else {
-        $message = "Base de donnée inconnue";
+    } else
+    {
+        $message = "Erreur de connexion, verifier votre fichier config";
     }
-} else {
-    $message = "Erreur de connexion";
+
+    $response = [
+        'data' => $data,
+        'message' => $message,
+    ];
+
+    return $response;
+
 }
 
-//fermer la connection
-mysqli_close($mysqli);
+
