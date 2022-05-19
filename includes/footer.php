@@ -1,4 +1,17 @@
 <footer class=" bg-dark text-white">
+    <?php if ($_SESSION['status'] == 'admin') { ?>
+    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+        <li>
+            <a  class="nav-link foot-nav" href="addAuthor.php">Add Author</a>
+        </li>
+        <li>
+            <a  class="nav-link foot-nav" href="">Manage loans</a>
+        </li>
+        <li>
+            <a  class="nav-link foot-nav" href="promote.php">Promote member</a>
+        </li>
+    </ul>
+    <?php } ?>
     <p class="text-center text-muted copyright">&copy; EPFC 2022, Made with <strong>❤</strong> by <a id="mail" class="mail text-decoration-none" href="mailto:cdujardin4000@gmail.com">cdujardin4000</a></p>
 </footer>
 

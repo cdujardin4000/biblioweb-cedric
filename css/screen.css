@@ -48,6 +48,14 @@ a:hover{
     color: #d12d90;
 }
 /*footer*/
+.foot-nav{
+    font-size: 1.5rem;
+    color: #d12d90;
+    margin-bottom: 2.5rem;
+}
+.foot-nav:hover{
+    color: #ce0384;
+}
 footer{
     padding-top: 2rem;
     padding-bottom: 2rem;

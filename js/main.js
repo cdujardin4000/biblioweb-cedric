@@ -8,6 +8,12 @@ $(function(){
     $('#mail:hover').css({'color': '#d12d90'});
     $('.change-logo').css({'margin-top': '1rem'});
     $('label.statusMessage').css({'margin': '2rem 0','font-size': '2rem'});
+    updateSelect = (selectedValue) =>
+    {
+        this.value = selectedValue;
+        console.log(this.value);
+    }
+
 
 
 });

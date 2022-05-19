@@ -24,6 +24,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'check')
 
         $_SESSION['username'] = $user['login'];
         $_SESSION['status'] = $user['statut'];
+        $_SESSION['statusChanged'] = 0;
         header("location: ../index.php?succes=connect");
     } else {
         header("location: log.php?error=true&path=admin&action=login");

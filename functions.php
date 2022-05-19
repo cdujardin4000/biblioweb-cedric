@@ -1,7 +1,4 @@
 <?php
-
-
-
 /**
  * @param $authors
  * @return array
@@ -33,6 +30,14 @@ function filterAuthors($needle)
         if (str_contains(strtolower($author['firstname']), strtolower($needle)) || str_contains(strtolower($author['lastname']), strtolower($needle)))
         {
             $filtered[] = $author;
+            foreach ($filtered as $findAuthor)
+            {
+                $_SESSION['lastAuthorsFind'][] = $findAuthor['lastname'];
+                if (isset($_SESSION['lastAuthorsFind']) && count($_SESSION['lastAuthorsFind']) > 3)
+                {
+                    array_shift($_SESSION['lastAuthorsFind']);
+                }
+            }
         }
     }
 
@@ -63,6 +68,12 @@ function filterBooks($authors)
 
     return $filtered;
 }
+
+/**
+ * @param $username
+ * @param $password
+ * @return array|false|string[]|void
+ */
 function pwVerif($username, $password)
 {
     // Connexion au serveur MySQL et sélection de la base de données
@@ -79,17 +90,22 @@ function pwVerif($username, $password)
             mysqli_free_result($result); // Libérer la mémoire
 
             if ($user && password_verify($password, $user['password'])) {
+
                 mysqli_close($mysqli); // Fermer la connexion au serveur
                 return $user;
             }
         }
         mysqli_close($mysqli); // Fermer la connexion au serveur
+
         return false;
     }
 }
 
-
-
+/**
+ * @param $username
+ * @param $password
+ * @param $mail
+ */
 function addUser($username, $password, $mail)
 {
 // Create connection
@@ -119,7 +135,47 @@ function addUser($username, $password, $mail)
     }
 }
 
-function editBook($title, $author_id, $description, $cover_url, $id)
+
+
+/**
+ * @param $title
+ * @param $author_id
+ * @param $description
+ * @param $cover_url
+ * @return bool|void
+ */
+function addBook($title, $author_id/*, $description, $cover_url*/)
+{
+
+// Create connection
+    $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+// Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+    $query = "INSERT INTO books (title, author_id, description, cover_url) VALUES ('$title', '$author_id', null, null)";
+
+    if ($mysqli->query($query)) {
+        //var_dump($mysqli->connect_error);die;
+        $mysqli->close();
+        return  true;
+
+    } else {
+
+        return false;
+    }
+}
+
+/**
+ * @param $lastname
+ * @param $firstname
+ * @param $nationality
+ * @return bool|void
+ */
+
+
+
+function addAuthor($lastname, $firstname, $nationality)
 {
 // Create connection
     $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
@@ -127,20 +183,21 @@ function editBook($title, $author_id, $description, $cover_url, $id)
     if ($mysqli->connect_error) {
         die("Connection failed: " . $mysqli->connect_error);
     }
+    // Nettoyage des données externes
+    $lastname = mysqli_real_escape_string($mysqli, $lastname);
+    $firstname = mysqli_real_escape_string($mysqli, $firstname);
+    $nationality = mysqli_real_escape_string($mysqli, $nationality);
 
-    $query = "UPDATE `books` SET `title` = '$title', `author_id`= '$author_id', `description` = '$description', `cover_url` = '$cover_url' WHERE `ref` = $id";
+
+    $query = "INSERT INTO authors (lastname, firstname, nationality) VALUES ('$lastname', '$firstname', '$nationality')";
 
     if ($mysqli->query($query)) {
-        //var_dump($mysqli);
         $mysqli->close();
-
-        return  true;
-
+        return true;
 
     } else {
-        $mysqli->close();
-        return $mysqli->error;
 
+        return false;
     }
 }
 /*

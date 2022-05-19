@@ -35,21 +35,12 @@ $message = $getFromAuth['message'];
             <a class="btn btn-primary" href="edit.php?id=<?= $id ?>&authId=<?= $authId ?>" >Edit</a>
         <?php } ?>
         <h1 class="book-title"><?= $book['title']?></h1>
-        <table class="table table-striped table-bordered">
+        <div class="container">
             <?php foreach($book as $key => $value) { ?>
-                <tr>
-                    <th class = 'thDetail'>
-                        <p class = 'list-text'><?= $key ?></p>
-                    </th>
-                    <td>
-                        <p class='list-text'><?= $value ?></p>
-                    </td>
-                </tr>
+                <h3 class='list-text'><?= $key ?>:</h3>
+                <p class='list-text'><?= $value ?></p>
             <?php } ?>
-            <tr>
-
-            </tr>
-        </table>
+        </div>
         <h2 class="book-title">sur l'auteur:</h2>
         <p><?= $author['firstname'] . " " . strtoupper($author['lastname']) . " - " . $author['nationality']?></p>
         <h2 class="book-title">Du même auteur:</h2>

@@ -15,6 +15,8 @@ $path = "admin";
 <div class = "container">
     <p>Bonjour, </p>
     <p>Bienvenue dans la zone admin</p>
+    <a class="btn btn-primary" href="../addAuthor.php" >Add author</a>
+    <a class="btn btn-primary" href="../add.php" >Add book</a>
 </div>
 <div class="container form mb-3">
     <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="admin.php" method="post" enctype="multipart/form-data">
