@@ -17,7 +17,7 @@ function deleteBook($refDel)
         die("Connection failed: " . $mysqli->connect_error);
     }
 
-    $query = "DELETE FROM books WHERE ref ='$refDel'";
+    $query = "DELETE FROM books WHERE ref =$refDel";
 
     if ($mysqli->query($query)) {
 
@@ -154,9 +154,9 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                     <?php } else { ?>
                     <td>
                     <?php if($_SESSION['status'] == 'admin') { ?>
-                        <!-- Delete trigger modal
+                        <!-- Delete trigger modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</button>
-                         Modal
+                        <!-- Modal -->
                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -168,16 +168,15 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                                         Cette action est irréversible
                                     </div>
                                     <div class="modal-footer">
-
+                                        <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
+                                            <input type="hidden" name="refDel" value="<?= $book['ref'] ?>">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </form>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>-->
-                        <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
-                            <input type="hidden" name="refDel" value="<?= $book['ref'] ?>">
-                            <button type="submit" class="btn btn-primary">Delete</button>
-                        </form>
+                        </div>
                         <a class="btn btn-primary" href="edit.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Edit</a>
                     <?php } else if($_SESSION['status'] == 'membre') { ?>
                         <a class="btn btn-primary" href="loan.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Loan</a>
