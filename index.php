@@ -93,10 +93,14 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
 <div class="container list">
     <?php if (isset($_GET['succes'])) { ?>
     <!-- On affiche les succes -->
-    <p class="succes"><?= $succes ?></p>
+    <div class="alert alert-success" role="alert">
+        <p class="succes"><?= $succes ?></p>
+    </div>
     <?php } else if (isset($_GET['error'])) { ?>
     <!-- On affiche les erreurs -->
-    <p class="error"><?= $error ?></p>
+    <div class="alert alert-danger" role="alert">
+        <p class="error"><?= $error ?></p>
+    </div>
     <?php } ?>
     <!--On affiche la photo pour les nouveau membre-->
     <?php if($_SESSION['status'] == 'novice') { ?>
@@ -146,6 +150,8 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                     <td>
                         <img src="<?= $book['cover_url'] ?>" alt="<?= $book['title'] ?>" class='book list-img'>
                     </td>
+                    <?php if ($_SESSION['status'] == "unknown") { ?>
+                    <?php } else { ?>
                     <td>
                     <?php if($_SESSION['status'] == 'admin') { ?>
                         <!-- Delete trigger modal
@@ -177,6 +183,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                         <a class="btn btn-primary" href="loan.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Loan</a>
                     <?php } ?>
                     </td>
+                    <?php } ?>
                 </tr>
             <?php } ?>
             </tbody>

@@ -23,7 +23,7 @@ $path = "admin";
         <input type="hidden" name="MAX_FILE_SIZE" value="300000"/>
         <label class="form-label statusMessage"><?= $logoMessage ?></label>
         <input type="file" class="form-control form-control-dark" name="logo">
-        <input type="submit" class="btn btn-warning change-logo" value="Valider">
+        <input type="submit" class="btn btn-primary change-logo" value="Valider">
     </form>
 </div>
 <?php

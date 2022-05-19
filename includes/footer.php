@@ -16,9 +16,9 @@
 </footer>
 
 <!-- Bootstrap Bundle with Popper -->
-<script src=<?=$prefUrl."js\bootstrap.bundle.min.js"?>></script>
-<script src=<?=$prefUrl."js\jquery.js"?>></script>
-<script src=<?=$prefUrl."js\main.js"?>></script>
+<script src=<?=$prefUrl."js/bootstrap.bundle.min.js"?>></script>
+<script src=<?=$prefUrl."js/jquery.js"?>></script>
+<script src=<?=$prefUrl."js/main.js"?>></script>
 
 </body>
 </html>

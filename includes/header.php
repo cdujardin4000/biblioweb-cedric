@@ -34,9 +34,9 @@ if (isset($_SESSION['username'])){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href=<?=$prefUrl."css\bootstrap.min.css"?>>
+    <link rel="stylesheet" href=<?=$prefUrl."css/bootstrap.min.css"?>>
     <!-- CSS -->
-    <link rel="stylesheet" href=<?=$prefUrl."css\screen.css"?>>
+    <link rel="stylesheet" href=<?=$prefUrl."css/screen.css"?>>
 </head>
 <body>
 
@@ -53,10 +53,10 @@ if (isset($_SESSION['username'])){
                         <a  class="nav-link text-white" href=<?=$prefUrl."index.php"?>>Home</a>
                     </li>
                     <li>
-                        <a  class="nav-link text-white" href=<?=$prefUrl."admin\membre.php?path=admin"?>>Membre</a>
+                        <a  class="nav-link text-white" href=<?=$prefUrl."admin/membre.php?path=admin"?>>Membre</a>
                     </li>
                     <li>
-                        <a  class="nav-link text-white" href=<?=$prefUrl."admin\admin.php?path=admin"?>>Admin</a>
+                        <a  class="nav-link text-white" href=<?=$prefUrl."admin/admin.php?path=admin"?>>Admin</a>
                     </li>
                 </ul>
             </div>
@@ -72,10 +72,10 @@ if (isset($_SESSION['username'])){
             <div class="text-end">
                 <p class = "welcome"><?= $messageWelcome?></p>
                 <?php if ($connected) { ?>
-                    <a  class="btn btn-outline-light" href=<?=$prefUrl."admin\log.php?action=logout"?>>Logout</a>
+                    <a  class="btn btn-outline-light" href=<?=$prefUrl."admin/log.php?action=logout"?>>Logout</a>
                 <?php } else { ?>
-                    <a class="btn btn-outline-light" href=<?=$prefUrl."admin\log.php?action=login&path=admin"?>>Login</a>
-                    <a class="btn btn-outline-light" href=<?=$prefUrl."admin\signUp.php?path=admin"?>>Sign-up</a>
+                    <a class="btn btn-outline-light" href=<?=$prefUrl."admin/log.php?action=login&path=admin"?>>Login</a>
+                    <a class="btn btn-outline-light" href=<?=$prefUrl."admin/signUp.php?path=admin"?>>Sign-up</a>
                 <?php } ?>
             </div>
         </div>

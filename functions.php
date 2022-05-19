@@ -144,7 +144,7 @@ function addUser($username, $password, $mail)
  * @param $cover_url
  * @return bool|void
  */
-function addBook($title, $author_id/*, $description, $cover_url*/)
+function addBook($title, $author_id, $description, $cover_url)
 {
 
 // Create connection
@@ -153,7 +153,12 @@ function addBook($title, $author_id/*, $description, $cover_url*/)
     if ($mysqli->connect_error) {
         die("Connection failed: " . $mysqli->connect_error);
     }
-    $query = "INSERT INTO books (title, author_id, description, cover_url) VALUES ('$title', '$author_id', null, null)";
+
+    $title = mysqli_real_escape_string($mysqli, $title);
+    $description = mysqli_real_escape_string($mysqli, $description);
+    $cover_url = mysqli_real_escape_string($mysqli, $cover_url);
+
+    $query = "INSERT INTO books (title, author_id, description, cover_url) VALUES ('$title', '$author_id', '$description', '$cover_url')";
 
     if ($mysqli->query($query)) {
         //var_dump($mysqli->connect_error);die;

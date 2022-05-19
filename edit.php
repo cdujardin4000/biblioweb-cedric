@@ -12,12 +12,16 @@ include 'functions.php';
  */
 function editBook($title, $author_id, $description, $cover_url, $ref)
 {
+
     // Create connection
     $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
     // Check connection
     if ($mysqli->connect_error) {
         die("Connection failed: " . $mysqli->connect_error);
     }
+    $title = mysqli_real_escape_string($mysqli, $title);
+    $description = mysqli_real_escape_string($mysqli, $description);
+    $cover_url = mysqli_real_escape_string($mysqli, $cover_url);
 
     $query = "UPDATE books SET title='$title', author_id='$author_id', description='$description', cover_url='$cover_url' WHERE ref ='$ref'";
 

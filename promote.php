@@ -86,28 +86,38 @@ else if(isset($_POST['retrograde']))
 <div class="container">
     <?php if (isset($_GET['succes'])) { ?>
         <!-- On affiche les succes -->
-        <p class="succes"><?= $succes ?></p>
+        <div class="alert alert-success" role="alert">
+            <p class="succes"><?= $succes ?></p>
+        </div>
     <?php } else if (isset($_GET['error'])) { ?>
         <!-- On affiche les erreurs -->
-        <p class="error"><?= $error ?></p>
+        <div class="alert alert-danger" role="alert">
+            <p class="error"><?= $error ?></p>
+        </div>
     <?php } ?>
     <form action="<?= $_SERVER['PHP_SELF']?>" method="post" class="row g-3">
         <table class="table table-striped table-bordered">
+            <tr>
+                <td>USERNAME</td>
+                <td>STATUS</td>
+                <td>PROMOUVOIR</td>
+                <td>RETROGRADER</td>
+            </tr>
             <?php foreach ($users as $user) { ?>
-                <tr>
-                    <td><?= $user['login']?></td>
-                    <td><?= $user['statut']?></td>
-                    <td>
-                        <?php if ($user['statut'] == 'novice' || $user['statut'] == 'membre') { ?>
-                        <button type="submit" name="promote" value="<?= $user['id']?>" class="btn btn-primary">Promouvoir</button>
-                        <?php } ?>
-                    </td>
-                    <td>
-                        <?php if ($user['statut'] == 'membre' || $user['statut'] == 'admin') { ?>
-                        <button type="submit" name="retrograde" value="<?= $user['id']?>" class="btn btn-primary">Retrograder</button>
-                        <?php } ?>
-                    </td>
-                </tr>
+            <tr>
+                <td><?= $user['login']?></td>
+                <td><?= $user['statut']?></td>
+                <td>
+                    <?php if ($user['statut'] == 'novice' || $user['statut'] == 'membre') { ?>
+                    <button type="submit" name="promote" value="<?= $user['id']?>" class="btn btn-primary">Promouvoir</button>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if ($user['statut'] == 'membre' || $user['statut'] == 'admin') { ?>
+                    <button type="submit" name="retrograde" value="<?= $user['id']?>" class="btn btn-primary">Retrograder</button>
+                    <?php } ?>
+                </td>
+            </tr>
             <?php } ?>
         </table>
     </form>

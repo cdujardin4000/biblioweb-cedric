@@ -5,15 +5,15 @@ include 'functions.php';
 
 
 
-if (!empty($_POST['title']) && !empty($_POST['author_id'])/* && !empty($_POST['description']) && !empty($_POST['cover_url']*/)
+if (!empty($_POST['title']) && !empty($_POST['author_id']) && !empty($_POST['description']) && !empty($_POST['cover_url']))
 {
     // Nettoyage des données externes
     $title = htmlspecialchars( $_POST['title']);
     $author_id = htmlspecialchars($_POST['author_id']);
-    /*$description = htmlspecialchars($_POST['description']);
-    $cover_url = htmlspecialchars($_POST['cover_url']);*/
+    $description = htmlspecialchars($_POST['description']);
+    $cover_url = htmlspecialchars($_POST['cover_url']);
 
-    if(addBook($title, $author_id /*$description, $cover_url*/))
+    if(addBook($title, $author_id, $description, $cover_url))
     {
         header("location: index.php?succes=addBook");
     }
@@ -45,8 +45,8 @@ $authorsRealIds = getAuthorIds($authors);
     <p class="error"></p>
     <?php } ?>
     <form class="row g-3"  method="post" action="add.php">
-    <?php foreach($book as $param => $value) { ?>
-    <?php if ($param == 'ref'){ ?>
+        <?php foreach($book as $param => $value) { ?>
+        <?php if ($param == 'ref'){ ?>
 
         <?php } else if ($param == 'author_id'){ ?>
         <div class="col-12">
