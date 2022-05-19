@@ -1,4 +1,6 @@
 # biblioweb-cedric
+admin: user:kaneda pw:1234
+
 
 1. La session demarre en $_SESSION['statut'] = 'unknown'
 2. apres sign-in l'utilisateur est en $_SESSION['statut'] = 'novice'. cela permet d'afficher un message d'accueil et une photo de bienvenue
