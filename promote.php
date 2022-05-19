@@ -44,7 +44,7 @@ function changeStatus($id)
                 $query = "UPDATE users SET statut='membre' WHERE id =$id";
             } else if ($user['statut'] == 'membre')
             {
-                $query = "UPDATE users SET statut='admin' WHERE id =$id";
+                $query = "UPDATE users SET statut='novice' WHERE id =$id";
             }
         }
 

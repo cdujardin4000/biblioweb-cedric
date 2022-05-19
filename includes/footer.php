@@ -8,7 +8,7 @@
             <a  class="nav-link foot-nav" href="">Manage loans</a>
         </li>
         <li>
-            <a  class="nav-link foot-nav" href="promote.php">Promote member</a>
+            <a  class="nav-link foot-nav" href="<?=$prefUrl?>promote.php">Promote member</a>
         </li>
     </ul>
     <?php } ?>

@@ -3,6 +3,52 @@ include 'includes/header.php';
 include 'functions.php';
 include 'dbaccess.php';
 
+if (isset($_GET['error']))
+{
+    $error = match ($_GET['error']) {
+        'membre' => "Désolé, vous devez être membre pour aller sur cette page...",
+        'admin' => "Désolé, vous devez être admin pour aller sur cette page...",
+        'db' => "Problème avec la base de donnée, veuillez contacter votre administrateur réseau...",
+    };
+}
+
+if (isset($_GET['succes']))
+{
+    $succes = match ($_GET['succes']) {
+        'deco' => "Vous êtes déconnecté, à bientôt",
+        'connect' => "Bonjour " . $_SESSION['username'] . ". Vous êtes bin connecté en tant que " . $_SESSION['status'] . ", Heureux de vous revoir parmis nous",
+        'userCreated' => "Bienvenue parmis nous " . $_SESSION['username'] . ". N'hésitez pas à contacter un admin en cas de problème.",
+        'editBook' => "Livre correctement mis à jour.",
+        'addBook' => "Livre correctement ajouté.",
+        'deleteBook' => "Livre correctement supprimé.",
+        'addAuthor' => "Auteur correctement ajouté.",
+    };
+}
+
+//récupere les livres
+$query = "SELECT * FROM books";
+$getBooks = dbAccess($query);
+$books = $getBooks['data'];
+$message = $getBooks['message'];
+
+//recupére auteurs
+$query = "SELECT * FROM authors" ;
+$getAuthorsNames = dbAccess($query);
+$authorsNames = $getAuthorsNames['data'];
+$message = $getAuthorsNames['message'];
+$authorsRealIds = getAuthorIds($authorsNames);
+
+//recherche livre par auteur
+if (isset($_GET['query']) && !empty($_GET['query'])){
+    $authors = filterAuthors(strtolower($_GET['query']));
+    $books = filterBooks($authors);
+}
+
+//récupere les livres indisponibles
+$query = "SELECT * FROM loans";
+$getLoans = dbAccess($query);
+$loans = $getLoans['data'];
+$message = $getLoans['message'];
 
 /**
  * @param $ref
@@ -43,51 +89,6 @@ if (!empty($_POST['refDel']))
         header("location: index.php?error=db");
     }
 }
-
-
-if (isset($_GET['error']) &&  $_GET['error'] == 'membre') {
-    $error = "Désolé, vous devez être membre pour aller sur cette page...";
-} else if (isset($_GET['error']) &&  $_GET['error'] == 'admin') {
-    $error = "Désolé, vous devez être admin pour aller sur cette page...";
-} else if (isset($_GET['error']) &&  $_GET['error'] == 'db') {
-    $error = "Problème avec la base de donnée, veuillez contacter votre administrateur réseau...";
-}
-
-
-if (isset($_GET['succes']) &&  $_GET['succes'] == 'deco') {
-    $succes = "Vous êtes déconnecté, à bientôt";
-} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'connect'){
-    $succes = "Bonjour " . $_SESSION['username'] . ". Vous êtes bin connecté en tant que " . $_SESSION['status'] . ", Heureux de vous revoir parmis nous";
-} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'userCreated'){
-    $succes = "Bienvenue parmis nous " . $_SESSION['username'] . ". N'hésitez pas à contacter un admin en cas de problème.";
-} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'editBook') {
-    $succes = "Livre correctement mis à jour.";
-} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'addBook') {
-    $succes = "Livre correctement ajouté.";
-} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'deleteBook') {
-    $succes = "Livre correctement supprimé.";
-} else if (isset($_GET['succes']) &&  $_GET['succes'] == 'addAuthor') {
-    $succes = "Auteur correctement ajouté.";
-}
-//récupere les livres
-$query = "SELECT * FROM books";
-$getBooks = dbAccess($query);
-$books = $getBooks['data'];
-$message = $getBooks['message'];
-
-//recupére auteurs
-$query = "SELECT * FROM authors" ;
-$getAuthorsNames = dbAccess($query);
-$authorsNames = $getAuthorsNames['data'];
-$message = $getAuthorsNames['message'];
-$authorsRealIds = getAuthorIds($authorsNames);
-
-//recherche livre par auteur
-if (isset($_GET['query']) && !empty($_GET['query'])){
-    $authors = filterAuthors(strtolower($_GET['query']));
-    $books = filterBooks($authors);
-}
-
 ?>
 
 <div class="container list">
@@ -179,8 +180,16 @@ if (isset($_GET['query']) && !empty($_GET['query'])){
                         </div>
                         <a class="btn btn-primary" href="edit.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Edit</a>
                     <?php } else if($_SESSION['status'] == 'membre') { ?>
-                        <a class="btn btn-primary" href="loan.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Loan</a>
-                    <?php } ?>
+                        <?php $state = 'available';
+                        foreach ($loans as $loan) {
+                            if ($loan['book_id'] == $book['ref']) {
+                                $state = 'unavailable'; break;
+                            }
+                        }
+                        if ($state == 'available') { ?>
+                            <a class="btn btn-primary" href="loan.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Loan</a>
+                        <?php }
+                    } ?>
                     </td>
                     <?php } ?>
                 </tr>
