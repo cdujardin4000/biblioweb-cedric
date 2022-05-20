@@ -139,6 +139,7 @@ INSERT INTO `users` (`id`, `login`, `email`, `statut`, `password`, `created_at`,
 (26, 'clark', 'cla@sull.com', 'novice', '$2y$10$5F1s81rrBcJFtT5y47OlReFSwePxYSlScA7q15NsaK5P1zr13m9eW', '2021-04-23 16:54:15', NULL),
 (27, 'lara', 'lara@sull.com', 'novice', '$2y$10$5F1s81rrBcJFtT5y47OlReFSwePxYSlScA7q15NsaK5P1zr13m9eW', '2021-04-23 17:02:48', NULL),
 (28, 'link', 'link@sull.com', 'novice', '$2y$10$5F1s81rrBcJFtT5y47OlReFSwePxYSlScA7q15NsaK5P1zr13m9eW', '2021-05-14 14:19:24', NULL);
+(29, 'kaneda', 'link@sull.com', 'admin', '$2y$10$yg87ijlMw6POlXY2nPQg2ObpWjoh/Bake5UzpQOKWAm4YaQZyWG/C', '2021-05-14 14:19:24', NULL);
 
 --
 -- Index pour les tables déchargées
