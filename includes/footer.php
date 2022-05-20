@@ -2,7 +2,7 @@
     <?php if ($_SESSION['status'] == 'admin') { ?>
     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
         <li>
-            <a  class="nav-link foot-nav" href="addAuthor.php">Add Author</a>
+            <a  class="nav-link foot-nav" href="<?=$prefUrl?>addAuthor.php">Add Author</a>
         </li>
         <li>
             <a  class="nav-link foot-nav" href="">Manage loans</a>
