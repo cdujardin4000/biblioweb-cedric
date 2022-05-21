@@ -5,7 +5,7 @@
             <a  class="nav-link foot-nav" href="<?=$prefUrl?>addAuthor.php">Add Author</a>
         </li>
         <li>
-            <a  class="nav-link foot-nav" href="">Manage loans</a>
+            <a  class="nav-link foot-nav" href="#">Manage loans</a>
         </li>
         <li>
             <a  class="nav-link foot-nav" href="<?=$prefUrl?>promote.php">Promote member</a>

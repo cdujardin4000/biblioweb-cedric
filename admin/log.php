@@ -22,6 +22,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'check')
     if ($user = pwVerif($username, $password)){
         $connected = true;
 
+        $_SESSION['id'] = $user['id'];
         $_SESSION['username'] = $user['login'];
         $_SESSION['status'] = $user['statut'];
         $_SESSION['statusChanged'] = 0;

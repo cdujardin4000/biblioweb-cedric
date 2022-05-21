@@ -22,6 +22,7 @@ if (isset($_GET['succes']))
         'addBook' => "Livre correctement ajouté.",
         'deleteBook' => "Livre correctement supprimé.",
         'addAuthor' => "Auteur correctement ajouté.",
+        'loanBook' => "Livre loué. Bonne lecture",
     };
 }
 
@@ -51,7 +52,7 @@ $loans = $getLoans['data'];
 $message = $getLoans['message'];
 
 /**
- * @param $ref
+ * @param $refDel
  * @return bool|void
  */
 function deleteBook($refDel)
@@ -75,6 +76,42 @@ function deleteBook($refDel)
         return $mysqli->error;
     }
 }
+
+/**
+ * @param $id
+ * @param $loandBook
+ * @param $returnDate
+ * @return string|void
+ */
+function loanBook($id, $loandBook, $returnDate)
+{
+
+    // Create connection
+    $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+    // Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    $query = "INSERT INTO loans (user_id,book_id,return_date) VALUES ('$id','$loandBook','$returnDate')";
+
+    if ($mysqli->query($query)) {
+
+        $mysqli->close();
+        header("location: index.php?succes=loanBook");
+
+    } else {
+
+        return $mysqli->error;
+    }
+}
+if (isset($_POST['btn-loan'])){
+    $loandBook = $_POST['book_id'];
+    $id = $_SESSION['id'];
+    $returnDate = date('Y-m-d', strtotime('+7days'));
+    loanBook($id, $loandBook, $returnDate);
+}
+
 
 //recuperer id deletebook
 if (!empty($_POST['refDel']))
@@ -126,9 +163,9 @@ if (!empty($_POST['refDel']))
                 <th>
                     <h2 class='list-text'>Couverture</h2>
                 </th>
-                <!--On affiche pas le bouton si on est ni admin ni membre-->
+                <!--On affiche pas les boutons si on est ni admin ni membre-->
                 <?php if($_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
-                    <!--Sinon on l'affiche-->
+                    <!--Sinon on les affiche-->
                 <?php }  else { ?>
                     <th>
                         <h2 class='list-text'>Actions</h2>
@@ -180,20 +217,44 @@ if (!empty($_POST['refDel']))
                         </div>
                         <a class="btn btn-primary" href="edit.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Edit</a>
                     <?php } else if($_SESSION['status'] == 'membre') { ?>
-                        <?php $state = 'available';
+                        <?php
+                        $loaned = false;
+                        $rateable = false;
+                        $available = true;
                         foreach ($loans as $loan) {
                             if ($loan['book_id'] == $book['ref']) {
-                                $state = 'unavailable'; break;
+                                $available = false;
+                                if ($loan['return_date'] > date('Y-m-d')) {
+                                    $return = $loan['return_date'];
+                                    $rateable = false;
+                                    $loaned = true;
+                                    $available = false;
+                                }
+                                if ($loan['return_date'] < date('Y-m-d')) {
+                                    $rateable = true;
+                                    $loaned = false;
+                                    $available = true;
+                                }
                             }
                         }
-                        if ($state == 'available') { ?>
-                            <a class="btn btn-primary" href="loan.php?id=<?= $book['ref'] ?>&authId=<?= $authorsRealIds[$book['author_id']]['id'] ?>" >Loan</a>
+                        if($rateable) { ?>
+                            <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                                <input type="hidden" name="book_id" value="<?=$book['ref']?>">
+                                <button name="btn-rate" type=submit class="btn btn-primary">Rate</button>
+                            </form>
+                        <?php } if ($available) { ?>
+                            <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                                <input type="hidden" name="book_id" value="<?=$book['ref']?>">
+                                <button name="btn-loan" type=submit class="btn btn-primary">Loan</button>
+                            </form>
+                        <?php } if ($loaned) { ?>
+                            <p class="list-text">retour prévu: <?= $return ?></p>
                         <?php }
+                        }
                     } ?>
                     </td>
                     <?php } ?>
                 </tr>
-            <?php } ?>
             </tbody>
         </table>
     <?php } ?>
