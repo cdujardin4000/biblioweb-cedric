@@ -287,7 +287,7 @@ if (!empty($_POST['refDel']))
                             }
                         }
                         if ($available) { ?>
-                            <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                            <form method="post" class="loan-rate-form" action="<?=$_SERVER['PHP_SELF']?>">
                                 <input type="hidden" name="book_id" value="<?=$book['ref']?>">
                                 <button name="btn-loan" type=submit class="btn btn-primary">Loan</button>
                             </form>
@@ -303,7 +303,7 @@ if (!empty($_POST['refDel']))
                                 }
                             }
                             if ($state == 'rate'){ ?>
-                                <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                                <form class="loan-rate-form" method="post" action="<?=$_SERVER['PHP_SELF']?>">
                                     <input type="hidden" name="book_id" value="<?=$book['ref']?>">
                                     <select name ="rating" class="form-select form-select loan-rate-form" aria-label="form-select" required onchange="updateSelect(this.value);">
                                         <option selected>rate book</option>
@@ -318,14 +318,14 @@ if (!empty($_POST['refDel']))
                                         <option value="9">9</option>
                                         <option value="10">10</option>
                                     </select>
-                                    <button name="btn-rate" type=submit class="btn btn-primary">Rate</button>
+                                    <button name="btn-rate" type=submit class="btn btn-primary loan-rate-form">rate</button>
                                 </form>
                             <?php }
                             else if ($state == 'changeRate') { ?>
-                                <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                                <form class="loan-rate-form" method="post" action="<?=$_SERVER['PHP_SELF']?>">
                                     <input type="hidden" name="book_id" value="<?=$book['ref']?>">
                                     <select name ="rating-change" class="loan-rate-form form-select form-select" aria-label="form-select" required onchange="updateSelect(this.value);">
-                                        <option selected>Change rate(<?= $rating['rating'] ?>)</option>
+                                        <option selected>Change rate</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -337,7 +337,7 @@ if (!empty($_POST['refDel']))
                                         <option value="9">9</option>
                                         <option value="10">10</option>
                                     </select>
-                                    <button name="btn-change-rate" type=submit class="btn btn-primary">Change rate</button>
+                                    <button name="btn-change-rate" type=submit class="btn btn-primary loan-rate-form">rate</button>
                                 </form>
                             <?php }
                         }
