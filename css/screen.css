@@ -32,9 +32,11 @@ p.welcome{
 /*list*/
 select.loan-rate-form{
     width : 10rem;
+    height: 100%;
 }
 .loan-rate-form{
     display: inline-block;
+    margin-left: .5rem;
 }
 .table-bordered > :not(caption) > * > * {
     border-width: 2px;

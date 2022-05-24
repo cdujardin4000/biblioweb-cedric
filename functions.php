@@ -1,4 +1,7 @@
 <?php
+
+
+
 /**
  * @param $authors
  * @return array
@@ -205,6 +208,8 @@ function addAuthor($lastname, $firstname, $nationality)
         return false;
     }
 }
+
+
 
 function changeLogo(){
     $LogoMessage = "Veuillez choisir le nouveau logo";

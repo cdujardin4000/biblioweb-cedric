@@ -45,9 +45,6 @@ if (isset($_GET['query']) && !empty($_GET['query']))
 {
     $authors = filterAuthors(strtolower($_GET['query']));
     $books = filterBooks($authors);
-    if (count($books) == 0) {
-
-    }
 }
 
 //récupere les livres indisponibles
@@ -61,6 +58,21 @@ $query = "SELECT * FROM ratings";
 $getRatings = dbAccess($query);
 $ratings = $getRatings['data'];
 $message = $getRatings['message'];
+
+//recuperer id deletebook
+if (!empty($_POST['refDel']))
+{
+    $refDel = htmlspecialchars($_POST['refDel']);
+    if(deleteBook($refDel))
+    {
+        header("location: index.php?succes=deleteBook");
+    }
+    else
+    {
+        header("location: index.php?error=db");
+    }
+}
+
 /**
  * @param $refDel
  * @return bool|void
@@ -140,6 +152,72 @@ function loanBook($id, $loandBook, $returnDate)
         return $mysqli->error;
     }
 }
+
+/**
+ * @param $id
+ * @return array|false[]
+ */
+function getBookRating($id){
+    $query = "SELECT * FROM ratings WHERE book_id=$id && rating is NOT NULL";
+    $bookRatings = dbAccess($query);
+    $votes= $bookRatings['data'];
+    $nbVotes = count($votes);
+    $sum =0;
+    foreach($votes as $vote){
+        $sum += $vote['rating'];
+    }
+    if($nbVotes > 0){
+        $averageRating = round($sum / $nbVotes);
+    }
+
+
+    if($nbVotes == 0){
+        $response = [
+            'rated' => false,
+        ];
+
+    } else {
+        $response = [
+            'rated' => true,
+            'nbVotes' => $nbVotes,
+            'avRating' => $averageRating,
+        ];
+
+    }
+    return $response;
+}
+
+/**
+ * @param $book_id
+ * @param $id
+ * @param $rating_change
+ * @return bool|string|void
+ */
+function changeRate($book_id, $id, $rating_change)
+{
+
+    // Create connection
+    $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+    // Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+    $book_id = mysqli_real_escape_string($mysqli, $book_id);
+    $id = mysqli_real_escape_string($mysqli, $id);
+    $rating_change = mysqli_real_escape_string($mysqli, $rating_change);
+
+    $query = "UPDATE ratings SET rating='$rating_change' WHERE user_id='$id' && book_id='$book_id'";
+
+    if ($mysqli->query($query)) {
+
+        $mysqli->close();
+        return  true;
+
+    } else {
+
+        return $mysqli->error;
+    }
+}
 if (isset($_POST['btn-loan'])){
     $loandBook = $_POST['book_id'];
     $id = $_SESSION['id'];
@@ -148,23 +226,21 @@ if (isset($_POST['btn-loan'])){
     insertRatings($id, $loandBook);
     loanBook($id, $loandBook, $returnDate);
 }
+if (isset($_POST['btn-rate'])){
+    $book_id = $_POST['book_id'];
+    $id = $_SESSION['id'];
+    $rating = $_POST['rating'];
 
-
-//recuperer id deletebook
-if (!empty($_POST['refDel']))
-{
-    $refDel = htmlspecialchars($_POST['refDel']);
-    if(deleteBook($refDel))
-    {
-        header("location: index.php?succes=deleteBook");
-    }
-    else
-    {
-        header("location: index.php?error=db");
-    }
+    changeRate($book_id, $id, $rating);
 }
-//var_dump($ratings);
-//var_dump($loans);
+if (isset($_POST['btn-change-rate'])){
+    $book_id = $_POST['book_id'];
+    $id = $_SESSION['id'];
+    $rating_change = $_POST['rating-change'];
+
+    changeRate($book_id, $id, $rating_change);
+}
+
 ?>
 
 <div class="container list">
@@ -188,28 +264,31 @@ if (!empty($_POST['refDel']))
     } else { ?>
         <table class="table table-striped table-bordered">
             <thead>
-            <tr>
-                <th>
-                    <h2 class='list-text'>Référence</h2>
-                </th>
-                <th>
-                    <h2 class='list-text'>Titre</h2>
-                </th>
-                <th>
-                    <h2 class='list-text'>Auteur</h2>
-                </th>
-                <th>
-                    <h2 class='list-text'>Couverture</h2>
-                </th>
-                <!--On affiche pas les boutons si on est ni admin ni membre-->
-                <?php if($_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
-                    <!--Sinon on les affiche-->
-                <?php }  else { ?>
+                <tr>
                     <th>
-                        <h2 class='list-text'>Actions</h2>
+                        <h2 class='list-text'>Référence</h2>
                     </th>
-                <?php } ?>
-            </tr>
+                    <th>
+                        <h2 class='list-text'>Titre</h2>
+                    </th>
+                    <th>
+                        <h2 class='list-text'>Auteur</h2>
+                    </th>
+                    <th>
+                        <h2 class='list-text'>Note</h2>
+                    </th>
+                    <th>
+                        <h2 class='list-text'>Couverture</h2>
+                    </th>
+                    <!--On affiche pas les boutons si on est ni admin ni membre-->
+                    <?php if($_SESSION['status'] !== 'membre' && $_SESSION['status'] !== 'admin') { ?>
+                        <!--Sinon on les affiche-->
+                    <?php }  else { ?>
+                        <th>
+                            <h2 class='list-text'>Actions</h2>
+                        </th>
+                    <?php } ?>
+                </tr>
             </thead>
             <tbody id="content">
             <?php foreach($books as $book) { ?>
@@ -222,6 +301,18 @@ if (!empty($_POST['refDel']))
                     </td>
                     <td>
                         <p class='list-text'><?= $authorsRealIds[$book['author_id']]['firstname']. " " . $authorsRealIds[$book['author_id']]['lastname'] ?></p>
+                    </td>
+                    <td>
+                        <?php
+                        $bookratings = getBookRating($book['ref']);
+                        if ($bookratings['rated'] == true){
+                            echo "<p>{$bookratings['avRating']}</p>";
+                            echo "<p>{$bookratings['nbVotes']}  Votes</p>";
+                        } else {
+                            echo "<p>Pas de votes</p>";
+                        }
+
+                        ?>
                     </td>
                     <td>
                         <img src="<?= $book['cover_url'] ?>" alt="<?= $book['title'] ?>" class='book list-img'>
@@ -342,16 +433,13 @@ if (!empty($_POST['refDel']))
                             <?php }
                         }
                     }
-                    } ?>
-                    </td>
-                    <?php } ?>
-                    </td>
+                } ?>
+                </td>
+                <?php } ?>
                 </tr>
             </tbody>
         </table>
     <?php } ?>
-    <!-- On affiche les messages -->
-    <p class="no-result"><?= $message ?></p>
 </div>
 <?php
 include 'includes/footer.php';
