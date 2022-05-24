@@ -30,6 +30,12 @@ p.welcome{
 }
 
 /*list*/
+select.loan-rate-form{
+    width : 10rem;
+}
+.loan-rate-form{
+    display: inline-block;
+}
 .table-bordered > :not(caption) > * > * {
     border-width: 2px;
 }

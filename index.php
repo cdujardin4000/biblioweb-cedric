@@ -9,6 +9,7 @@ if (isset($_GET['error']))
         'membre' => "Désolé, vous devez être membre pour aller sur cette page...",
         'admin' => "Désolé, vous devez être admin pour aller sur cette page...",
         'db' => "Problème avec la base de donnée, veuillez contacter votre administrateur réseau...",
+        'noBooks' => "Pas de livre Trouvé...",
     };
 }
 
@@ -40,9 +41,13 @@ $message = $getAuthorsNames['message'];
 $authorsRealIds = getAuthorIds($authorsNames);
 
 //recherche livre par auteur
-if (isset($_GET['query']) && !empty($_GET['query'])){
+if (isset($_GET['query']) && !empty($_GET['query']))
+{
     $authors = filterAuthors(strtolower($_GET['query']));
     $books = filterBooks($authors);
+    if (count($books) == 0) {
+
+    }
 }
 
 //récupere les livres indisponibles
@@ -51,6 +56,11 @@ $getLoans = dbAccess($query);
 $loans = $getLoans['data'];
 $message = $getLoans['message'];
 
+//récupere les ratings
+$query = "SELECT * FROM ratings";
+$getRatings = dbAccess($query);
+$ratings = $getRatings['data'];
+$message = $getRatings['message'];
 /**
  * @param $refDel
  * @return bool|void
@@ -76,7 +86,33 @@ function deleteBook($refDel)
         return $mysqli->error;
     }
 }
+/**
+ * @param $id
+ * @param $loandBook
+ * @return string|void
+ */
+function insertRatings($id, $loandBook)
+{
 
+    // Create connection
+    $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+    // Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    $query = "INSERT INTO ratings (`user_id`,`book_id`,`rating`) VALUES ('$id','$loandBook',NULL)";
+
+    if ($mysqli->query($query)) {
+
+        $mysqli->close();
+
+    } else {
+
+        return $mysqli->error;
+    }
+}
+//insertRatings(24, 17);
 /**
  * @param $id
  * @param $loandBook
@@ -85,7 +121,6 @@ function deleteBook($refDel)
  */
 function loanBook($id, $loandBook, $returnDate)
 {
-
     // Create connection
     $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
     // Check connection
@@ -109,6 +144,8 @@ if (isset($_POST['btn-loan'])){
     $loandBook = $_POST['book_id'];
     $id = $_SESSION['id'];
     $returnDate = date('Y-m-d', strtotime('+7days'));
+    // Ajouter une ligne dans la table ratings
+    insertRatings($id, $loandBook);
     loanBook($id, $loandBook, $returnDate);
 }
 
@@ -126,6 +163,8 @@ if (!empty($_POST['refDel']))
         header("location: index.php?error=db");
     }
 }
+//var_dump($ratings);
+//var_dump($loans);
 ?>
 
 <div class="container list">
@@ -145,9 +184,8 @@ if (!empty($_POST['refDel']))
         <img src="img/dock-1846008_1920.jpg" alt= "IMAGE DE BIENVENUE" class="img-welcome"/>
     <?php } ?>
     <?php if(count($books) == 0) {
-        $messageNoResult = "Pas de livre Trouvé";?>
-        <p class="no-result"><?= $messageNoResult ?></p>
-    <?php } else { ?>
+        header("location: index.php?error=noBooks");
+    } else { ?>
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
@@ -188,8 +226,8 @@ if (!empty($_POST['refDel']))
                     <td>
                         <img src="<?= $book['cover_url'] ?>" alt="<?= $book['title'] ?>" class='book list-img'>
                     </td>
-                    <?php if ($_SESSION['status'] == "unknown") { ?>
-                    <?php } else { ?>
+                <?php if ($_SESSION['status'] == "unknown") { ?>
+                <?php } else { ?>
                     <td>
                     <?php if($_SESSION['status'] == 'admin') { ?>
                         <!-- Delete trigger modal -->
@@ -224,25 +262,31 @@ if (!empty($_POST['refDel']))
                         foreach ($loans as $loan) {
                             if ($loan['book_id'] == $book['ref']) {
                                 $available = false;
-                                if ($loan['return_date'] > date('Y-m-d')) {
+                                if ($loan['return_date'] > date('Y-m-d') && $loan['user_id'] == $_SESSION['id']) {
                                     $return = $loan['return_date'];
                                     $rateable = false;
                                     $loaned = true;
                                     $available = false;
                                 }
-                                if ($loan['return_date'] < date('Y-m-d')) {
+                                if ($loan['return_date'] < date('Y-m-d') && $loan['user_id'] == $_SESSION['id']) {
                                     $rateable = true;
+                                    $loaned = false;
+                                    $available = true;
+                                }
+                                if ($loan['return_date'] > date('Y-m-d')&& $loan['user_id'] != $_SESSION['id']) {
+                                    $return = $loan['return_date'];
+                                    $rateable = false;
+                                    $loaned = true;
+                                    $available = false;
+                                }
+                                if ($loan['return_date'] < date('Y-m-d') && $loan['user_id'] != $_SESSION['id']) {
+                                    $rateable = false;
                                     $loaned = false;
                                     $available = true;
                                 }
                             }
                         }
-                        if($rateable) { ?>
-                            <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-                                <input type="hidden" name="book_id" value="<?=$book['ref']?>">
-                                <button name="btn-rate" type=submit class="btn btn-primary">Rate</button>
-                            </form>
-                        <?php } if ($available) { ?>
+                        if ($available) { ?>
                             <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
                                 <input type="hidden" name="book_id" value="<?=$book['ref']?>">
                                 <button name="btn-loan" type=submit class="btn btn-primary">Loan</button>
@@ -250,15 +294,62 @@ if (!empty($_POST['refDel']))
                         <?php } if ($loaned) { ?>
                             <p class="list-text">retour prévu: <?= $return ?></p>
                         <?php }
+                        if($rateable) {
+                            foreach ($ratings as $rating) {
+                                if ($rating['user_id'] == $_SESSION['id'] && $rating['book_id'] == $book['ref'] && $rating['rating'] != NULL ) {
+                                    $state = 'changeRate';
+                                } else if ($rating['user_id'] == $_SESSION['id'] && $rating['book_id'] == $book['ref'] && $rating['rating'] == NULL) {
+                                    $state = 'rate';
+                                }
+                            }
+                            if ($state = 'rate'){ ?>
+                                <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                                    <input type="hidden" name="book_id" value="<?=$book['ref']?>">
+                                    <select name ="rating" class="form-select form-select loan-rate-form" aria-label="form-select" required onchange="updateSelect(this.value);">
+                                        <option selected>rate book</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <button name="btn-rate" type=submit class="btn btn-primary">Rate</button>
+                                </form>
+                            <?php }
+                            else if ($state = 'changeRate') { ?>
+                                <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+                                    <input type="hidden" name="book_id" value="<?=$book['ref']?>">
+                                    <select name ="rating-change" class="loan-rate-form form-select form-select" aria-label="form-select" required onchange="updateSelect(this.value);">
+                                        <option selected>Change rate(<?= $rating['rating'] ?>)</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <button name="btn-change-rate" type=submit class="btn btn-primary">Change rate</button>
+                                </form>
+                            <?php }
                         }
+                    }
                     } ?>
                     </td>
                     <?php } ?>
+                    </td>
                 </tr>
             </tbody>
         </table>
     <?php } ?>
-
     <!-- On affiche les messages -->
     <p class="no-result"><?= $message ?></p>
 </div>

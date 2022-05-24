@@ -205,7 +205,7 @@ function addAuthor($lastname, $firstname, $nationality)
         return false;
     }
 }
-/*
+
 function changeLogo(){
     $LogoMessage = "Veuillez choisir le nouveau logo";
     if(!empty($_FILES['logo'])){
@@ -231,7 +231,7 @@ function changeLogo(){
         }
     }
 
-}*/
+}
 
 
 
