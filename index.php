@@ -302,7 +302,7 @@ if (!empty($_POST['refDel']))
                                     $state = 'rate';
                                 }
                             }
-                            if ($state = 'rate'){ ?>
+                            if ($state == 'rate'){ ?>
                                 <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
                                     <input type="hidden" name="book_id" value="<?=$book['ref']?>">
                                     <select name ="rating" class="form-select form-select loan-rate-form" aria-label="form-select" required onchange="updateSelect(this.value);">
@@ -321,7 +321,7 @@ if (!empty($_POST['refDel']))
                                     <button name="btn-rate" type=submit class="btn btn-primary">Rate</button>
                                 </form>
                             <?php }
-                            else if ($state = 'changeRate') { ?>
+                            else if ($state == 'changeRate') { ?>
                                 <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
                                     <input type="hidden" name="book_id" value="<?=$book['ref']?>">
                                     <select name ="rating-change" class="loan-rate-form form-select form-select" aria-label="form-select" required onchange="updateSelect(this.value);">
