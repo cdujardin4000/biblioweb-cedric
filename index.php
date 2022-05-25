@@ -89,10 +89,10 @@ function deleteBook($refDel)
     $query = "DELETE FROM books WHERE ref =$refDel";
 
     if ($mysqli->query($query)) {
-
         $mysqli->close();
-        return true;
 
+        return true;
+        
     } else {
 
         return $mysqli->error;
@@ -116,9 +116,7 @@ function insertRatings($id, $loandBook)
     $query = "INSERT INTO ratings (`user_id`,`book_id`,`rating`) VALUES ('$id','$loandBook',NULL)";
 
     if ($mysqli->query($query)) {
-
         $mysqli->close();
-
     } else {
 
         return $mysqli->error;
@@ -143,10 +141,8 @@ function loanBook($id, $loandBook, $returnDate)
     $query = "INSERT INTO loans (user_id,book_id,return_date) VALUES ('$id','$loandBook','$returnDate')";
 
     if ($mysqli->query($query)) {
-
         $mysqli->close();
         header("location: index.php?succes=loanBook");
-
     } else {
 
         return $mysqli->error;
@@ -163,27 +159,27 @@ function getBookRating($id){
     $votes= $bookRatings['data'];
     $nbVotes = count($votes);
     $sum =0;
+
     foreach($votes as $vote){
         $sum += $vote['rating'];
     }
+
     if($nbVotes > 0){
         $averageRating = round($sum / $nbVotes);
     }
-
 
     if($nbVotes == 0){
         $response = [
             'rated' => false,
         ];
-
     } else {
         $response = [
             'rated' => true,
             'nbVotes' => $nbVotes,
             'avRating' => $averageRating,
         ];
-
     }
+
     return $response;
 }
 
@@ -322,7 +318,7 @@ if (isset($_POST['btn-change-rate'])){
                     <td>
                     <?php if($_SESSION['status'] == 'admin') { ?>
                         <!-- Delete trigger modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</button>
+                        <button type="button" class="btn btn-primary open-AddBookDialog" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="<?= $book['ref'] ?>">Delete</button>
                         <!-- Modal -->
                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -336,8 +332,8 @@ if (isset($_POST['btn-change-rate'])){
                                     </div>
                                     <div class="modal-footer">
                                         <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
-                                            <input type="hidden" name="refDel" value="<?= $book['ref'] ?>">
-                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                            <input type="hidden" name="refDel" id="bookId">
+                                            <button class= "btn-delete" type="submit" class="btn btn-primary">Delete</button>
                                         </form>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>

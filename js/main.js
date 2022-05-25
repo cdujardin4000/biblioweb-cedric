@@ -13,6 +13,10 @@ $(function(){
         console.log(this.value);
     }
 
+    $(document).on("click", ".open-AddBookDialog", function () {
+        let myBookId = $(this).data('id');
+        $(".modal-footer #bookId").val( myBookId );
+    });
     hideModal = () =>
     {
         SUCCESS.hide();
