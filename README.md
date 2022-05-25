@@ -1,4 +1,6 @@
 # biblioweb-cedric
+
+AJOUT D'UNE TABLE RATINGS => biblioweb.sql
 novice: tester la création de compte
 membre avec location: user:lara pw:1234
 membre sans location: user:bob pw:1234
