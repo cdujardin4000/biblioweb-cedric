@@ -23,7 +23,8 @@ un user MEMBRE:
 
 un user ADMIN:
 -peut voir la liste des livres, 
--voir le détail d'un livre,  
+-voir le détail d'un livre, 
+-modifier un livre,
 -ajouter des auteurs, 
 -promote ou retrograde un user, 
 -gerer les locations(à implémenter), 
