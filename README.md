@@ -1,13 +1,15 @@
 # biblioweb-cedric
 
 AJOUT D'UNE TABLE RATINGS => biblioweb.sql
+Qd un membre loue un livre un ligne se crée automatiquement dans la table rankings, qd la date retour d'une location est dépassée le membre peut noter le livre et changer sa note.(pas de doublons)
+
 novice: tester la création de compte
 membre avec location: user:lara pw:1234
 membre sans location: user:bob pw:1234
 admin: user:kaneda pw:1234
 
 1. La session demarre en $_SESSION['statut'] = 'unknown'
-2. apres sign-in l'utilisateur est en $_SESSION['statut'] = 'novice'. cela permet d'afficher un message d'accueil et une photo de bienvenue
+2. apres sign-in l'utilisateur est en $_SESSION['statut'] = 'novice'. cela permet d'afficher un message d'accueil et une photo de bienvenue et éventuellement vérifier que c'est pas un bot.
 3. L'enregistrement db se mets en $_SESSION['statut'] = 'membre'
 4. Après déco reco il aura donc le statut de $_SESSION['statut'] = 'membre'
 
