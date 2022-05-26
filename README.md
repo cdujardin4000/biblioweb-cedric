@@ -15,10 +15,12 @@ admin: user:kaneda pw:1234
 un user NOVICE:
 -peut voir la liste des livres 
 -voir le détail d'un livre.
+-rechercher pas auteur
 
 un user MEMBRE: 
 -peut voir la liste des livres, 
 -voir le détail d'un livre, 
+-rechercher pas auteur
 -louer un livre, 
 -noter un livre s'il la date return est dépassée, 
 -changer sa note s'il l'a déja noté
@@ -26,17 +28,19 @@ un user MEMBRE:
 un user ADMIN:
 -peut voir la liste des livres, 
 -voir le détail d'un livre, 
+-rechercher pas auteur
 -modifier un livre,
 -ajouter des auteurs, 
 -promote ou retrograde un user, 
 -gerer les locations(à implémenter), 
 -ajouter livre, 
+-modifier livre
 -effacer livre.
--changer le logo (à implémenter)
+-changer le logo 
+-ajouter une cover à un livre sans cover (bouton page admin)
 
 Les membres ne voient que les livres disponibles... S'ils ont deja loué le livre, ils peuvent le relouer s'il est disponible et le noter, ils peuveut modifier leur note s'il ont déja noté.
 
 TODO: 
 -verifier injections sql et xss
--implémenter change logo
--chemin pour les covers
+
