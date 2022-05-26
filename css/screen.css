@@ -99,7 +99,14 @@ h4{
 .book-title{
     text-align: center;
 }
-
+.cover{
+    height: 350px;
+    width: 200px;
+}
+.cover-img{
+    height: 100%;
+    width: 100%;
+}
 
 p.errorLogin{
     color: red;

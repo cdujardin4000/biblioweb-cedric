@@ -1,7 +1,4 @@
 <?php
-
-
-
 /**
  * @param $authors
  * @return array
@@ -138,8 +135,6 @@ function addUser($username, $password, $mail)
     }
 }
 
-
-
 /**
  * @param $title
  * @param $author_id
@@ -180,9 +175,6 @@ function addBook($title, $author_id, $description, $cover_url)
  * @param $nationality
  * @return bool|void
  */
-
-
-
 function addAuthor($lastname, $firstname, $nationality)
 {
 // Create connection
@@ -209,34 +201,6 @@ function addAuthor($lastname, $firstname, $nationality)
     }
 }
 
-
-
-function changeLogo(){
-    $LogoMessage = "Veuillez choisir le nouveau logo";
-    if(!empty($_FILES['logo'])){
-        if($_FILES['logo']['error'] == 0){
-            if($_FILES['logo']['size'] < 300000 && $_FILES['logo']['type'] == 'image/png'){
-
-                //Renomme l'ancien fichier en old
-                //rename('\img\quiz-logo.png', '\img\quiz-logo-old.png');
-                //Renomme le nouveau fichier
-                $_FILES['logo']['name'] = "quiz-logo.png";
-                $source = $_FILES['logo']['tmp_name'];
-                $destination = getcwd() . '\img\\' . $_FILES['logo']['name'];
-
-                if(move_uploaded_file($source, $destination)){
-                    $LogoMessage = "Le fichier est valide, nous l'affichons tout de suite,  merci";
-
-                } else {
-                    $LogoMessage = "Erreur : fichier invalide (max-size: 300ko, format: png)";
-                }
-                return $LogoMessage;
-                header( "refresh:5;url=admin\admin.php" );
-            }
-        }
-    }
-
-}
 
 
 

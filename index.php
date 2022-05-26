@@ -92,7 +92,7 @@ function deleteBook($refDel)
         $mysqli->close();
 
         return true;
-        
+
     } else {
 
         return $mysqli->error;
