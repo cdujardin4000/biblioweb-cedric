@@ -311,7 +311,11 @@ if (isset($_POST['btn-change-rate'])){
                         ?>
                     </td>
                     <td>
-                        <img src="<?= $book['cover_url'] ?>" alt="<?= $book['title'] ?>" class='book list-img'>
+                        <?php if ($book['cover_url'] != null){ ?>
+                        <div class="cover">
+                            <img class="cover-img" alt="<?=$book['title']?>" src="img/covers/<?=$book['cover_url']?>">
+                        </div>
+                        <?php } ?>
                     </td>
                 <?php if ($_SESSION['status'] == "unknown") { ?>
                 <?php } else { ?>
