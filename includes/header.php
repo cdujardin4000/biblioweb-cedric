@@ -13,7 +13,7 @@ if(isset($_GET['path']) && $_GET['path'] == "admin")
 
 // Verification de la page pour afficher le double menu ou non
 $doubleMenu = true;
-if(isset($_GET['action']) && ($_GET['action'] == "login" || $_GET['action'] == "signUp")) {
+if(isset($_GET['action']) && (($_GET['action'] == "login" || $_GET['action'] == "signUp" || $_GET['action'] == "lostPw"))) {
     $doubleMenu = false;
 }
 
@@ -75,7 +75,7 @@ if (isset($_SESSION['username'])){
                     <a  class="btn btn-outline-light" href=<?=$prefUrl."admin/log.php?action=logout"?>>Logout</a>
                 <?php } else { ?>
                     <a class="btn btn-outline-light" href=<?=$prefUrl."admin/log.php?action=login&path=admin"?>>Login</a>
-                    <a class="btn btn-outline-light" href=<?=$prefUrl."admin/signUp.php?path=admin"?>>Sign-up</a>
+                    <a class="btn btn-outline-light" href=<?=$prefUrl."admin/log.php?action=signUp&path=admin"?>>Sign-up</a>
                 <?php } ?>
             </div>
         </div>

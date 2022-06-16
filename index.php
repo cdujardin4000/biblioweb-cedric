@@ -24,6 +24,8 @@ if (isset($_GET['succes']))
         'deleteBook' => "Livre correctement supprimé.",
         'addAuthor' => "Auteur correctement ajouté.",
         'loanBook' => "Livre loué. Bonne lecture",
+        'resetPw' => "Vérifiez vos emails afin de réintialiser votre mot de passe",
+        'pwUpdated' => "Votre mot de passe à été mis à jour...",
     };
 }
 
@@ -255,6 +257,25 @@ if (isset($_POST['btn-change-rate'])){
     <?php if($_SESSION['status'] == 'novice') { ?>
         <img src="img/dock-1846008_1920.jpg" alt= "IMAGE DE BIENVENUE" class="img-welcome"/>
     <?php } ?>
+    <section class="container">
+        <h2>A la une</h2>
+        <?php
+        $row = 1;
+
+        if ( ($handle = fopen("books_spotlight.csv", "r")) !== false )
+        {
+            while ( ($data = fgetcsv($handle, 1000, ";")) !== false )
+            {
+                if ($row != 1) {
+                    echo "<p><a href='view.php?id={$data[0]}&authId={$data[2]}'>$data[1]</a></p>";
+                }
+                $row++;
+                if ($row == 6) break;
+            }
+            fclose($handle);
+        }
+        ?>
+    </section>
     <?php if(count($books) == 0) {
         header("location: index.php?error=noBooks");
     } else { ?>

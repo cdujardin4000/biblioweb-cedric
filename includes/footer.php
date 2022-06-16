@@ -5,13 +5,15 @@
             <a  class="nav-link foot-nav" href="<?=$prefUrl?>addAuthor.php">Add Author</a>
         </li>
         <li>
-            <a  class="nav-link foot-nav" href="#">Manage loans</a>
+            <a  class="nav-link foot-nav" href="<?=$prefUrl?>manageLoans.php">Manage loans</a>
         </li>
         <li>
             <a  class="nav-link foot-nav" href="<?=$prefUrl?>promote.php">Promote member</a>
         </li>
     </ul>
-    <?php } ?>
+    <?php } else if ($_SESSION['status'] == 'membre') {
+        include 'includes/tagcloud.inc.php';
+    } ?>
     <p class="text-center text-muted copyright">&copy; EPFC 2022, Made with <strong>❤</strong> by <a id="mail" class="mail text-decoration-none" href="mailto:cdujardin4000@gmail.com">cdujardin4000</a></p>
 </footer>
 
