@@ -25,15 +25,9 @@ if(isset($_GET['login'])){
                                     INNER JOIN loans l ON books.ref=l.book_id
                                     INNER JOIN users  u ON u.id=l.user_id 
                                     WHERE login=?");
-        /*
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_array(MYSQLI_NUM)) {
-            foreach ($row as $r) {
-                $loans[] = $r;
-            }
-          }*/
+
         $stmt->execute(array($login));
-        $loansFrom = $stmt->fetch_all(MYSQLI_NUM);
+        $loansFrom = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
         var_dump($result);
