@@ -40,6 +40,7 @@ un user ADMIN:
 -effacer livre.
 -changer le logo 
 -ajouter une cover à un livre sans cover (bouton page admin)
+-attribuer a un user au hazard un livre dont l'auteur n'à aucun livre en location
 
 Les membres ne voient que les livres disponibles... S'ils ont deja loué le livre, ils peuvent le relouer s'il est disponible et le noter, ils peuveut modifier leur note s'il ont déja noté.
 
