@@ -10,6 +10,9 @@
         <li>
             <a  class="nav-link foot-nav" href="<?=$prefUrl?>promote.php">Promote member</a>
         </li>
+        <li>
+            <a  class="nav-link foot-nav" href="<?=$prefUrl?>bookAttrib.php">Attrib location</a>
+        </li>
     </ul>
     <?php } else if ($_SESSION['status'] == 'membre') {
         include 'includes/tagcloud.inc.php';

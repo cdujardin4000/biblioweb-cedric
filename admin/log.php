@@ -50,9 +50,13 @@ if (isset($_GET['error']) &&  $_GET['error'] == 'pass') {
     $error = "Nous rencontrons des problèmes actuellement. Si cela se prolonge, veuillez contacter l'administration";
 } else if (isset($_GET['error']) &&  $_GET['error'] == 'login'){
     $error = "Il y à une erreur dans votre username ou dans votre password";
+} else if (isset($_GET['error']) &&  $_GET['error'] == 'notmail') {
+    $error = "Veuillez entrer un email valide";
 }
 
-if (isset($_POST['username']) && isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['mail1']) && isset($_POST['mail2'])){
+if (isset($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['mail1'], $_POST['mail2']) && !empty($_POST['username']) && !empty($_POST['password1']) && !empty($_POST['password2'])
+&& !empty($_POST['mail1'])  && !empty($_POST['mail2'])){
+
     $username = $_POST['username'];
     $password1 = $_POST['password1'];
     $password2 = $_POST['password2'];
@@ -62,6 +66,8 @@ if (isset($_POST['username']) && isset($_POST['password1']) && isset($_POST['pas
         header("location: ".$_SERVER['PHP_SELF']."?action=signUp&path=admin&error=pass");
     } else if ($mail1 != $mail2){
         header("location: ".$_SERVER['PHP_SELF']."?action=signUp&path=admin&error=mail");
+    } else if (!filter_var($mail1, FILTER_VALIDATE_EMAIL)){
+        header("location: ".$_SERVER['PHP_SELF']."?action=signUp&path=admin&error=notmail");
     }
     addUser($username, $password2,  $mail2);
 }
@@ -87,7 +93,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'resetPw') {
 
         $to      = $mail1;
         $subject = 'Reset Password';
-    $message = "<p>Bonjour veuillez cliquer sur ce lien pour réinitialiser votre mot de passe</p></br><a href='http://localhost/biblioweb/admin/log.php?action=pwReset&mail=$mail1&path=admin'>Reset password</a>";
+        $message = "<p>Bonjour veuillez cliquer sur ce lien pour réinitialiser votre mot de passe</p></br><a href='http://localhost/biblioweb/admin/log.php?action=pwReset&mail=$mail1&path=admin'>Reset password</a>";
 
         if (mail($to, $subject, $message)){
             var_dump("success");

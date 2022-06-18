@@ -460,7 +460,9 @@ if (isset($_POST['btn-change-rate'])){
                 </tr>
             </tbody>
         </table>
-    <?php } ?>
+    <?php }
+    include 'includes/events.inc.php';
+    ?>
 </div>
 <?php
 include 'includes/footer.php';

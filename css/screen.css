@@ -41,12 +41,18 @@ select.loan-rate-form{
 .table-bordered > :not(caption) > * > * {
     border-width: 2px;
 }
-th{
-    border : black 4px solid;
+.table > :not(:first-child){
+    border-top: 0;
+}
+.table{
+    caption-side: top;
 }
 p.list-text{
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+.list-text{
+    padding: 1rem 0;
 }
 a{
     color: #ce0384;
@@ -131,3 +137,9 @@ p.errorLogin{
 .copyright{
     margin-top: 2rem;
 }
+
+.content-manage-loans{
+    text-align: center;
+    margin-top: 2rem;
+}
+
