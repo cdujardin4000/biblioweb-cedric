@@ -142,6 +142,30 @@ function addUser($username, $password, $mail)
  * @param $cover_url
  * @return bool|void
  */
+/**
+ * @param $id
+ * @param $loandBook
+ * @return string|void
+ */
+function insertRatings($id, $loandBook)
+{
+
+    // Create connection
+    $mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+    // Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    $query = "INSERT INTO ratings (`user_id`,`book_id`,`rating`) VALUES ('$id','$loandBook',NULL)";
+
+    if ($mysqli->query($query)) {
+        $mysqli->close();
+    } else {
+
+        return $mysqli->error;
+    }
+}
 function addBook($title, $author_id, $description, $cover_url)
 {
 

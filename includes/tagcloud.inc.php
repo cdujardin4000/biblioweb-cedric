@@ -17,14 +17,14 @@ if (isset($_GET['tag'])){
         die("Error : " . $e->getMessage());
     }
     //récupere les title
-    $requestFilterList = $db->prepare('SELECT title
+    $requestFilterList = $db->prepare('SELECT title, ref, author_id
                                             FROM books
                                             INNER JOIN book_tag bt on books.ref = bt.book_ref
                                             INNER  JOIN tags t on bt.tag_id = t.id
                                             WHERE tag = ?
                                             ORDER BY title');
     $requestFilterList->execute(array($_SESSION['preferedTag']));
-    $titles = $requestFilterList->fetchAll();
+    $tagBooks = $requestFilterList->fetchAll();
 }
 ?>
 
@@ -41,8 +41,8 @@ if (isset($_GET['tag'])){
     if (isset($_GET['tag'])){ ?>
         <h3>Résultat pour la recherche: <?=$_SESSION['preferedTag']?></h3>
         <ul>
-            <?php foreach ($titles as $title){ ?>
-                <li><?=$title['title']?></li>
+            <?php foreach ($tagBooks as $book){ ?>
+                <li><a href="view.php?id=<?= $book['ref'] ?>&authId=<?= $book['author_id'] ?>"><?=$book['title']?></a></li>
             <?php } ?>
         </ul>
     <?php } ?>
